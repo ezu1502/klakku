@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html lang = "en">
+    <head>
+        <title>{% block title %}{% endblock %} - Klakku Messenger</title>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+
+    <body>
+
+        <nav class="klakku-nav">
+            <a href="/" class="logo">Klakku</a>
+
+            <div class="options">
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            </div>
+            
+        </nav>
+
+        <main>
+            {% block main %}{% endblock %}
+        </main>
+    </body>
+</html>
