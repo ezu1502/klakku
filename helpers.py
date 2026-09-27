@@ -14,3 +14,5 @@ def validate_register_input(username, password, confirm) -> bool:
 
     print("validou")
     return True
+
+    

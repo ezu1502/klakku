@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 
 from database import Database
 from helpers import validate_register_input
@@ -28,6 +28,32 @@ def register():
         return redirect("/register")
 
     return redirect("/")
+
+@app.route("/login", methods = ["GET", "POST"])
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    if not username or not password:
+        return redirect("/login")
+
+    user_id = database.check_user(username, password)
+
+    if user_id is None:
+        return redirect("/login")
+
+    session["user_id"] = user_id
+
+    #TODO colocar secret_key
+
+    return redirect("/")
+
+def error(code: int = 400, text: str = "Something went wrong"):
+    return render_template("error.html", code = code, text = text)
+
 
 if __name__ == "__main__":
     app.run(debug = True)
