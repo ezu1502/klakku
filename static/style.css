@@ -4,28 +4,36 @@ body {
     background-color: #ececec;
 }
 
-main {
+#chat-body {
+    overflow: hidden;
+}
+
+main:not(#chat-main) {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: calc(100vh - 60px);
 }
 
-.klakku-nav {
+.klakku-nav, .recipient-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     padding: 15px 30px;
+}
 
-
+.klakku-nav {
     background-color: #455b66;
+}
+.recipient-nav {
+    background-color: #2a2f31;
 }
 .klakku-nav div {
     display: flex;
     gap: 20px;
 }
-.klakku-nav a {
+.klakku-nav a, .recipient-nav a {
     color: white;
     text-decoration: none;
 }
@@ -265,4 +273,140 @@ input:focus {
     flex-direction: column;
 
     gap: 20px;
+}
+
+
+#recipient-info {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+
+
+#chat-main {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    overflow-y: auto;
+    min-height: 0;
+
+    flex: 1;
+}
+
+.sent-message, .received-message {
+    max-width: 60%;
+    padding: 8px 12px;
+    border-radius: 8px;
+
+    color: #111111;
+
+}
+
+.sent-message {
+    align-self: flex-end;
+    background-color: #398ab3;
+
+}
+
+.received-message {
+    align-self: flex-start;
+    background-color: #96a0a5;
+}
+
+.sent-message span, .received-message span {
+    font-size: 0.75rem;
+}
+
+#no-messages-div {
+    position: absolute;
+    inset: 0; /* Controla left, top, right e bottom todos ao mesmo tempo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    pointer-events: none;
+}
+
+#no-messages-div p {
+    font-size: 40px;
+    text-align: center;
+
+
+    pointer-events: auto;
+
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
+
+
+    
+}
+
+#no-messages-div p:hover{
+    transform: scale(1.04);
+
+    color: #002436;
+
+    cursor: default;
+}
+
+.chat-controls {
+    min-height: 130px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+}
+
+#message-input {
+    flex: 1;
+
+    border-width: 2px;
+    border-color: transparent;
+
+    box-shadow: 5px 5px 15px #09054193;
+    border-radius: 10px;
+
+    transition: border-color 0.2s ease;
+
+    padding: 12px 15px;
+
+    font-size: 18px;
+}
+
+#message-input {
+    flex: 1;
+
+    border-width: 2px;
+    border-color: transparent;
+
+    box-shadow: 5px 5px 15px #09054193;
+    border-radius: 10px;
+
+    transition: border-color 0.2s ease;
+
+    resize: none;
+
+
+}
+#message-input:focus {
+    border-color: #002436;
+
+    outline: none;
+
+}
+
+#send-message-button {
+    min-width: 90px;
+    font-size: 16px;
+    border-radius: 15px;
 }

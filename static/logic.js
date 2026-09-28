@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", add_logic);
 function add_logic(){
     toggle_password_button();
     create_chat_dialog();
+    listen_to_send_button();
 }
 
 
@@ -45,4 +46,21 @@ function create_chat_dialog(){
             dialog.close();
         }
     });
+}
+
+function listen_to_send_button(){
+    const send_message_button = document.querySelector("#send-message-button");
+
+    send_message_button.addEventListener("click", send_message);
+}
+
+function send_message(){
+    const input = document.querySelector("#message-input");
+    
+    if (!input.value.trim()){
+        return;
+    }
+
+
+    input.value = "";
 }

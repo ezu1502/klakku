@@ -1,16 +1,30 @@
-from enum import Enum
+from enum import Enum, auto
 from pathlib import Path
 
 COMMAND_FOLDER = Path(__file__).parent / "sql_commands"
 
 class SQLCommands(Enum):
-    SCHEMA = COMMAND_FOLDER / "schema.sql"
+    @staticmethod
+    def _generate_next_value_(name: str, start: int, count: int, last_values: list[str]) -> str:
+        return name.lower() + ".sql"
 
-    CREATE_USER = COMMAND_FOLDER / "create_user.sql"
-    CHECK_USER = COMMAND_FOLDER / "check_user.sql"
-    GET_USER_BY_USERNAME = COMMAND_FOLDER / "get_user_by_username.sql"
+    SCHEMA = auto()
 
-    GET_CONVERSATION = COMMAND_FOLDER / "get_conversation.sql"
-    GET_USER_CONVERSATIONS = COMMAND_FOLDER / "get_user_conversations.sql"
+    CREATE_USER = auto()
+    CHECK_USER = auto()
+    GET_USER_BY_USERNAME = auto()
 
-    ADD_LOGIN = COMMAND_FOLDER / "add_login.sql"
+    GET_CONVERSATION = auto()
+    GET_USER_CONVERSATIONS = auto()
+    CHECK_CONVERSATION_EXISTS = auto()
+    CREATE_CHAT = auto()
+    INSERT_CHAT_MEMBER = auto()
+
+    ADD_LOGIN = auto()
+
+
+    GET_CHAT_MESSAGES = auto()
+
+    @property
+    def path(self) -> Path:
+        return COMMAND_FOLDER / self.value

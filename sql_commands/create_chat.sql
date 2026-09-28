@@ -1,0 +1,2 @@
+INSERT INTO conversations DEFAULT VALUES
+RETURNING id;

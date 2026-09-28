@@ -1,14 +1,15 @@
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from contextlib import contextmanager
-from enums import SQLCommands
+from collections.abc import Generator
+from enums import SQLCommands as Commands
 
 class Database:
     def __init__(self) -> None:
         self.initialize_database()
 
-    def read_command(self, command: SQLCommands):
-        command_text = command.value.read_text(encoding = "utf-8")
+    def _read_command(self, command: Commands):
+        command_text = command.path.read_text(encoding = "utf-8")
 
         if not command_text:
             raise RuntimeError("Couldn't read command")
@@ -21,7 +22,7 @@ class Database:
         return con
 
     @contextmanager
-    def connection(self, *, commit: bool = True):
+    def connection(self, *, commit: bool = True) -> Generator[sqlite3.Connection, None, None]:
         connection = self._get_connection()
         try:
             yield connection
@@ -44,14 +45,14 @@ class Database:
 
     def initialize_database(self):
         with self.connection() as con:
-            con.executescript(self.read_command(SQLCommands.SCHEMA))
+            con.executescript(self._read_command(Commands.SCHEMA))
 
     def create_user(self, username: str, password: str) -> bool:
         try:
             password_hash = generate_password_hash(password)
 
             self.execute_sql(
-                self.read_command(SQLCommands.CREATE_USER),
+                self._read_command(Commands.CREATE_USER),
                 (username, password_hash)
             )
 
@@ -62,7 +63,7 @@ class Database:
     def check_user(self, username: str, password: str) -> int | None:
         with self.connection(commit = False) as con:
             result = con.execute(
-                self.read_command(SQLCommands.CHECK_USER),
+                self._read_command(Commands.CHECK_USER),
                 (username,)
             ).fetchone()
 
@@ -82,7 +83,7 @@ class Database:
             Receives a username and returns a tuple in the format (user_id, username).
         """
         with self.connection(commit = False) as con:
-            user = con.execute(self.read_command(SQLCommands.GET_USER_BY_USERNAME), (username,)).fetchone()
+            user = con.execute(self._read_command(Commands.GET_USER_BY_USERNAME), (username,)).fetchone()
 
             if user is None:
                 return None
@@ -91,7 +92,7 @@ class Database:
 
     def get_conversation_with_user_ids(self, id_1: int, id_2: int) -> int | None:
         with self.connection(commit = False) as con:
-            conversation = con.execute(self.read_command(SQLCommands.GET_CONVERSATION), (id_1, id_2)).fetchone()
+            conversation = con.execute(self._read_command(Commands.GET_CONVERSATION), (id_1, id_2)).fetchone()
 
             if conversation is None:
                 return None
@@ -106,7 +107,7 @@ class Database:
 
         with self.connection(commit = False) as con:
             conversations = con.execute(
-                self.read_command(SQLCommands.GET_USER_CONVERSATIONS),
+                self._read_command(Commands.GET_USER_CONVERSATIONS),
                 (user_id, user_id)
             ).fetchall()
 
@@ -118,9 +119,68 @@ class Database:
         """
         with self.connection() as con:
             con.execute(
-                self.read_command(SQLCommands.ADD_LOGIN),
+                self._read_command(Commands.ADD_LOGIN),
                 (user_id,)
             )
 
+    def get_chat_between_users(self, id_1: int, id_2: int) -> int | None:
+        """
+            Receives two user ids and returns a conversation id between them if there is any.
+            If two users don't have any chat in history, function returns None
+        """
+        with self.connection(commit = False) as con:
+            result = con.execute(
+                self._read_command(Commands.CHECK_CONVERSATION_EXISTS),
+                (id_1, id_2)
+            ).fetchone()    
+
+            return result[0] if result is not None else None
             
             
+    def create_chat(self, user_1: int, user_2: int) -> int:
+        """
+            Creates a new chat between two users and returns its id.
+        """
+
+        with self.connection() as con:
+            result = con.execute(
+                self._read_command(Commands.CREATE_CHAT)
+            ).fetchone()
+
+            if result is None:
+                raise RuntimeError("Couldn't create chat")
+
+            new_chat_id = result[0]
+
+            con.execute(
+                self._read_command(Commands.INSERT_CHAT_MEMBER),
+                (new_chat_id, user_1)
+            )
+
+            con.execute(
+                self._read_command(Commands.INSERT_CHAT_MEMBER),
+                (new_chat_id, user_2)
+            )
+
+        return new_chat_id
+
+    def get_chat_messages(self, id_1: int, id_2: int) -> list[tuple] | None:
+        """
+            Finds the conversation_id between two users and queries the db to return all messages within
+            the chat.
+
+            Returns a list of tuples, each message in the following format: (sender_id, content, sent_at) 
+        """
+
+        chat_id = self.get_chat_between_users(id_1, id_2)
+
+        if chat_id is None:
+            return None
+
+        with self.connection(commit = False) as con:
+            result = con.execute(
+                self._read_command(Commands.GET_CHAT_MESSAGES),
+                (chat_id,)
+            ).fetchall()
+
+            return result

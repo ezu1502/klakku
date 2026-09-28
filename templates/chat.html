@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>
+            Chat with {{recipient.username}} - Klakku Messenger
+        </title>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <script src="{{ url_for('static', filename='logic.js') }}"></script>
+    </head>
+
+    <body id="chat-body">
+        <main id="chat-main">
+            <div>
+                <nav class="klakku-nav">
+                    <a href="/" class="logo">Klakku</a>
+
+                    <div class="options">
+                        {% if session.get("user_id") %}
+                            <a href="/">Account</a>
+                            <a href="/logout">Log Out</a>
+                        {% else %}
+                            <a href="/login">Login</a>
+                            <a href="/register">Register</a>
+                        {% endif %}
+                    </div>
+                    
+                </nav>
+
+                <nav class="recipient-nav">
+                    <a href="/" class="logo">{{ recipient.username }}</a>
+                    
+                </nav>
+
+            </div>
+
+            <section class="messages">
+                {% if not messages %}
+                <div id="no-messages-div">
+                    <p>There are no messages yet...<br>Send one here to start!</p>
+                </div>
+                {% else %}
+                    {% for message in messages %}
+                        {% if message.sender_id == user.id %}
+                            <div class="sent-message">
+                                <p>{{ message.content }}</p>
+                                <span>{{ message.sent_at }}</span>
+                            </div>
+                        {% else %}
+                            <div class="received-message">
+                                <p>{{ message.content }}</p>
+                                <span>{{ message.sent_at }}</span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                {% endif %}
+            </section>
+
+            <section class="chat-controls">
+                <textarea id="message-input" placeholder="Type a message" autofocus autocomplete="off"></textarea>
+
+                <button id="send-message-button" class="k-button">Send</button>
+            </section>
+            
+        </main>
+
+    </body>
+</html>
