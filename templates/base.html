@@ -14,8 +14,12 @@
             <a href="/" class="logo">Klakku</a>
 
             <div class="options">
-                <a href="/login">Login</a>
-                <a href="/register">Register</a>
+                {% if session.get("user_id") %}
+                    <a href="/">Account</a>
+                {% else %}
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                {% endif %}
             </div>
             
         </nav>

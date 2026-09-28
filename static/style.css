@@ -50,7 +50,7 @@ main {
     box-sizing: border-box;
 }
 
-.password-field input, .register-form input {
+input {
     width: 100%;
     height: 35px;
     box-sizing: border-box;
@@ -66,7 +66,7 @@ main {
 
 }
 
-.password-field input:focus {
+input:focus {
     outline: 1px solid #4c8aa8;
     border: 1px solid #4c8aa8;
 }
@@ -157,4 +157,112 @@ main {
 
 .error-main a:hover{
     color: #2c6a8a;
+}
+
+
+.link-button {
+    background-color: #002436;
+
+    text-decoration: none;
+    color: #EEEEEE;
+    font-size: 20px;
+
+    padding: 20px;
+    border-radius: 4px;
+
+    transition: background-color 0.2s ease;
+}
+
+.link-button:hover {
+    background-color: #104f6e;
+}
+
+.k-button {
+    background-color: #002436;
+
+    text-decoration: none;
+    color: #EEEEEE;
+    font-size: 20px;
+
+    padding: 20px;
+    border-radius: 4px;
+
+    border: none;
+
+    transition: 
+        background-color 0.25s ease,
+        transform 0.1s ease;
+}
+
+.k-button:hover {
+    background-color: #104f6e;
+
+    transform: scale(1.04);
+
+    cursor: pointer;
+}
+
+.k-button:active {
+    background-color: #2b8ab9;
+
+    transform: scale(0.96);
+}   
+
+#close-dialog-button {
+    background-color: transparent;
+    color: #3b3b3b;
+    border: 1px dashed #bebebe;
+}
+
+/* #close-dialog-button:hover {
+    background-color: #6e6e6e;
+}
+
+#close-dialog-button:active {
+    background-color: #acacac;
+} */
+
+#create-chat-dialog {
+    width: 500px;
+    height: 300px;
+    border: none;
+    border-radius: 10px;
+
+    opacity: 1;
+    transform: scale(1);
+
+    box-shadow: 5px 4px 30px #09054193;
+
+    transition:
+        opacity 0.3s ease 0.1s,
+        transform 0.4s ease 0.1s;
+
+    
+}
+
+@starting-style {
+    #create-chat-dialog[open] {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    #create-chat-dialog[open]::backdrop {
+        background: rgba(0, 0, 0, 0);
+    }
+}
+
+#create-chat-dialog::backdrop {
+    background: #011d2b99;
+    backdrop-filter: blur(5px);
+    transition:
+        background 0.3s ease,
+        overlay 0.3s ease allow-discrete;
+}
+
+
+#create-chat-dialog form{
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
 }

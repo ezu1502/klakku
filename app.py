@@ -1,10 +1,17 @@
+import os
 from flask import Flask, render_template, request, redirect, session
 
 from database import Database
 from helpers import validate_register_input
 
 database = Database()
+
 app = Flask(__name__)
+app.secret_key = os.environ["FLASK_SECRET_KEY"]
+
+
+def get_user_id():
+    return session.get("user_id")
 
 @app.get("/")
 def index():
@@ -47,7 +54,53 @@ def login():
 
     session["user_id"] = user_id
 
-    #TODO colocar secret_key
+    database.add_login(user_id = user_id)
+
+    return redirect("/")
+
+@app.route("/chats", methods = ["GET", "POST"])
+def chats():
+    if request.method == "GET":
+        user_id = get_user_id()
+
+        if user_id is None:
+            print("user_id is none!")
+            return redirect("/")
+
+        user_conversations = database.get_user_conversations(user_id)
+
+        return render_template("chats.html", conversations = user_conversations)
+
+    recipient = request.form.get("username")
+
+    if recipient is None:
+        return redirect("/")
+
+    return create_chat(recipient)
+
+def create_chat(rec: str):
+    recipient = database.get_user_by_username(rec)
+
+    if recipient is None:
+        return redirect("/")
+
+    recipient_id = recipient[0]
+
+    # TODO CHECAR SE JÁ EXISTE UMA CONVERSA ENTRE O USER E O RECIPIENT
+    # TODO CRIAR CHAT NO DATABASE
+    # TODO REDIRECIONAR PARA CHAT/<RECIPIENT>
+
+    return redirect("/")
+
+
+
+
+
+@app.get("/chat/<username>")
+def chat(username):
+    user_id = get_user_id()
+
+
 
     return redirect("/")
 

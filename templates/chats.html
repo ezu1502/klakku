@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+    Chats
+    
+{% endblock %}
+
+{% block main %}
+    
+    {% for conversation_id, username in conversations %}
+        <a href="/chat/{{ conversation_id }}">
+            {{username}}
+        </a>
+    {% endfor %}
+
+    <button class="k-button" id="open-dialog-button">
+        + Create Chat
+    </button>
+
+    <dialog id="create-chat-dialog">
+        <form method="post" action="/chats">
+            <h2>New Chat</h2>
+
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Username"
+                autofocus
+                autocomplete="off"
+            >
+
+            <button type="submit" class="k-button">Create</button>
+            <button type="button" id="close-dialog-button" class="k-button">Cancel</button>
+        </form>
+    </dialog>
+
+{% endblock %}
