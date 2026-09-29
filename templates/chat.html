@@ -10,7 +10,7 @@
         <script src="{{ url_for('static', filename='logic.js') }}"></script>
     </head>
 
-    <body id="chat-body">
+    <body id="chat-body" data-recipient-id="{{ recipient.id }}">
         <main id="chat-main">
             <div>
                 <nav class="klakku-nav">

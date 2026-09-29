@@ -5,12 +5,15 @@ from datetime import datetime
 from database import Database
 from helpers import validate_register_input
 
+import json
+
 database = Database()
 
 app = Flask(__name__)
 sock = Sock(app)
 app.secret_key = os.environ["FLASK_SECRET_KEY"]
 
+socket_connections: dict = {}
 
 def get_user_id() -> int | None:
     return session.get("user_id")
@@ -161,8 +164,40 @@ def chat(recipient_username: str):
 
 @sock.route("/ws")
 def websocket(ws):
-    ...
-    #TODO CONTINUAR AQUI
+    # print("SESSION:", session)
+    # print("COOKIES:", request.cookies)
+
+    user_id = get_user_id()
+    if user_id is None:
+        ws.close()
+        return
+    
+    socket_connections[user_id] = ws
+    print(f"CONNECTED: user={user_id}, connections={list(socket_connections.keys())}")
+
+    try:
+        while True:
+            message = ws.receive()
+
+            if message is None:
+                break
+
+            message_object = json.loads(message)
+            message_object["user_id"] = user_id
+
+            echo_message = json.dumps(message_object)
+            recipient_id = int(message_object["recipient_id"])
+        
+            if recipient_id in socket_connections:
+                socket_connections[recipient_id].send(echo_message)
+
+
+            ws.send(echo_message)
+    finally:
+        if socket_connections.get(user_id) is ws:
+            del socket_connections[user_id]
+
+            print(f"DISCONNECTED: user={user_id}, connections={list(socket_connections.keys())}")
 
 
 
@@ -171,4 +206,5 @@ def error(code: int = 400, text: str = "Something went wrong"):
 
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    # app.run(debug = True)
+    app.run(host = "0.0.0.0")

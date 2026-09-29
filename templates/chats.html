@@ -9,8 +9,8 @@
 {% block main %}
     
     {% for conversation_id, username in conversations %}
-        <a href="/chat/{{ conversation_id }}">
-            {{username}}
+        <a href="/chat/{{ username }}">
+            {{ username }}
         </a>
     {% endfor %}
 
