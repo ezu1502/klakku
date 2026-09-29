@@ -5,7 +5,7 @@ let socket;
 function add_logic(){
     toggle_password_button();
     create_chat_dialog();
-    listen_to_send_button();
+    listen_to_send();
 
     socket = connect_websocket();
 }
@@ -51,13 +51,22 @@ function create_chat_dialog(){
     });
 }
 
-function listen_to_send_button(){
+function listen_to_send(){
     const send_message_button = document.querySelector("#send-message-button");
 
-    if (!send_message_button){
+    const input = document.querySelector("#message-input");
+    
+    if (!send_message_button || !input){
         return;
     }
     send_message_button.addEventListener("click", send_message);
+
+    input.addEventListener("keydown", function(event){
+        if (event.key === "Enter" && !event.shiftKey){
+            event.preventDefault();
+            send_message();
+        }
+    });
 }
 
 function send_message(){

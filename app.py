@@ -164,16 +164,13 @@ def chat(recipient_username: str):
 
 @sock.route("/ws")
 def websocket(ws):
-    # print("SESSION:", session)
-    # print("COOKIES:", request.cookies)
-
     user_id = get_user_id()
     if user_id is None:
         ws.close()
         return
     
     socket_connections[user_id] = ws
-    print(f"CONNECTED: user={user_id}, connections={list(socket_connections.keys())}")
+    # print(f"CONNECTED: user={user_id}, connections={list(socket_connections.keys())}")
 
     try:
         while True:
@@ -186,8 +183,15 @@ def websocket(ws):
             message_object["user_id"] = user_id
 
             echo_message = json.dumps(message_object)
+
             recipient_id = int(message_object["recipient_id"])
-        
+            chat_id = database.get_chat_between_users(user_id, recipient_id)
+
+            if chat_id is None:
+                # Depois posso criar uma função que já cria o chat entre eles se n houver
+                continue
+
+            database.add_message(user_id, chat_id, message_object["content"])
             if recipient_id in socket_connections:
                 socket_connections[recipient_id].send(echo_message)
 

@@ -184,3 +184,10 @@ class Database:
             ).fetchall()
 
             return result
+
+    def add_message(self, sender_id: int, conversation_id: int, content: str):
+        with self.connection() as con:
+            con.execute(
+                self._read_command(Commands.ADD_MESSAGE),
+                (sender_id, conversation_id, content)
+            )

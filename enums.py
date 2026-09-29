@@ -24,6 +24,7 @@ class SQLCommands(Enum):
 
 
     GET_CHAT_MESSAGES = auto()
+    ADD_MESSAGE = auto()
 
     @property
     def path(self) -> Path:
