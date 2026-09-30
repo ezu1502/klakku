@@ -1,7 +1,7 @@
 body {
     margin: 0;
 
-    background-color: #ececec;
+    background-color: #eeeeee;
 }
 
 .logo {
@@ -12,6 +12,14 @@ body {
     font-size: 25px;
 }
 
+#main-logo {
+    transition: transform 0.2s cubic-bezier(0.3, 0, 0.7, 1.5);
+}
+
+#main-logo:hover {
+    transform: rotate(-5deg);
+}
+
 a, button, p, textarea, span {
     font-family: "Raleway", sans-serif;
     font-family: "Raleway", sans-serif;
@@ -19,6 +27,10 @@ a, button, p, textarea, span {
     font-style: normal;
 
     font-weight: 500;
+}
+
+hr {
+    margin: 20px;
 }
 
 #chat-body {
@@ -37,7 +49,14 @@ main:not(#chat-main) {
     justify-content: space-between;
     align-items: center;
 
-    padding: 15px 30px;
+}
+
+.klakku-nav {
+    padding: 20px 30px;
+}
+
+.recipient-nav {
+    padding: 10px 30px;
 }
 
 .klakku-nav {
@@ -185,18 +204,7 @@ input:focus {
 }
 
 
-.link-button {
-    background-color: #002436;
 
-    text-decoration: none;
-    color: #EEEEEE;
-    font-size: 20px;
-
-    padding: 20px;
-    border-radius: 4px;
-
-    transition: background-color 0.2s ease;
-}
 
 .link-button:hover {
     background-color: #104f6e;
@@ -586,3 +594,106 @@ h1 {
     text-decoration-color: #104f6eff;
 }
 
+main.hero-main {
+    display: block;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    flex-direction: column;
+}
+
+.hero {
+    position: relative;
+
+    width: 100%;
+    height: calc(100vh - 60px);
+
+    margin: 0;
+    padding: 0;
+}
+
+.hero-image {
+    margin: 0;
+    position: relative;
+
+    width: 100%;
+    height: 100%; 
+
+    display: block;
+    object-fit: cover;
+}
+
+.link-button {
+
+    bottom: 20px;
+    right: 20px;
+    position: fixed;
+    background-color: #002436;
+
+    text-decoration: none;
+    color: #EEEEEE;
+    font-size: 20px;
+
+    padding: 20px;
+    border-radius: 4px;
+
+    transition: background-color 0.2s ease;
+}
+
+footer {
+    background-color: #455b66;
+
+    margin: 0;
+
+    padding: 30px;
+}
+footer p {
+    font-family: "Share Tech", sans-serif;
+    font-size: 25px;
+
+    color: #eeeeee;
+    margin: 0;
+}
+
+.underlined {
+    font-family: "Share Tech", sans-serif;
+    font-size: 25px;
+
+    color: #eeeeee;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    text-decoration-thickness: 1px;
+
+    transition: color 0.2s ease;
+}
+
+.underlined:hover {
+    color: #00080c;
+}
+
+.nav-divider {
+    width: 1px;
+
+    height: 20px;
+
+    background-color: #eeeeee;
+
+    margin: 0px 10px;
+}
+
+.hero-text {
+    position: absolute;
+
+    left: 20px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 65px;
+
+    color: #eeeeee;
+}

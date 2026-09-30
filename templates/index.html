@@ -4,8 +4,14 @@
     Index
 {% endblock %}
 
-{% block main %}
-    <a href="/chats" class="link-button">chats</a>
+{% block main_class %}hero-main{% endblock %}
+
+{% block main %}    
+    <div class="hero">
+        <img src="{{ url_for('static', filename = 'hero.webp') }}" class="hero-image">
+
+        <h1 class="hero-text">Keep the<br>conversation going.</h1>
+    </div>
 {% endblock %}
 
 

@@ -43,6 +43,17 @@ def register():
     if not creation_success:
         return redirect("/register")
 
+
+    user = database.get_user_by_username(username) # type: ignore
+
+    if user is None:
+        return redirect("/")
+
+    _, user_id = user
+    
+    session["user_id"] = user_id
+    session["username"] = username
+
     return redirect("/")
 
 @app.route("/login", methods = ["GET", "POST"])

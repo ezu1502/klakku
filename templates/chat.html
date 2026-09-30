@@ -21,19 +21,22 @@
         <main id="chat-main">
             <div>
                 <nav class="klakku-nav">
-                    <a href="/" class="logo">Klakku</a>
+            <a href="/" class="logo" id="main-logo">Klakku</a>
 
-                    <div class="options">
-                        {% if session.get("user_id") %}
-                            <a href="/">Account</a>
-                            <a href="/logout">Log Out</a>
-                        {% else %}
-                            <a href="/login">Login</a>
-                            <a href="/register">Register</a>
-                        {% endif %}
-                    </div>
-                    
-                </nav>
+            <div class="options">
+                    <a href="/chats">Chats</a>
+
+                    <span class="nav-divider"></span>
+                {% if session.get("user_id") %}
+                    <a href="/profile/{{ session.get('username') }}">Profile</a>
+                    <a href="/logout">Log Out</a>
+                {% else %}
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                {% endif %}
+            </div>
+            
+        </nav>
 
                 <nav class="recipient-nav">
                     <a href="/profile/{{ recipient.username }}" class="logo">@{{ recipient.username }}</a>

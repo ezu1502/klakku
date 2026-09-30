@@ -18,9 +18,12 @@
     <body>
 
         <nav class="klakku-nav">
-            <a href="/" class="logo">Klakku</a>
+            <a href="/" class="logo" id="main-logo">Klakku</a>
 
             <div class="options">
+                    <a href="/chats">Chats</a>
+
+                    <span class="nav-divider"></span>
                 {% if session.get("user_id") %}
                     <a href="/profile/{{ session.get('username') }}">Profile</a>
                     <a href="/logout">Log Out</a>
@@ -32,8 +35,14 @@
             
         </nav>
 
-        <main>
+        <main class="{% block main_class %}{% endblock %}">
             {% block main %}{% endblock %}
         </main>
+
+        <footer>
+            <p>Push, chop. <span class="underlined">Klakku.</span></p>
+        </footer>
     </body>
+
+    
 </html>
