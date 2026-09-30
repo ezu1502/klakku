@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block main %}
+    <div class="user-info-container">
+
+        <a href="/chat/{{ username }}" id="username-title-hyperlink"> 
+            <h1 class="username-title">@{{username}}</h1>
+        </a>
+        
+        <div class="user-info">
+            {% for key, value in user_info.items() %}
+                <p class="stat"><strong>{{key | capitalize}}:</strong> {{ value }}</p>
+            {% endfor %}
+        </div>
+
+        <a href="/" id="go-back-link">Go Back</a>
+    </div>
+{% endblock %}

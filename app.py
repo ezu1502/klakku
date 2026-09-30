@@ -166,6 +166,21 @@ def chat(recipient_username: str):
         }
     )
 
+@app.get("/profile/<recipient_username>")
+def profile(recipient_username: str):
+    user_info = database.get_user_info(recipient_username)
+
+    if user_info is None:
+        return redirect("/")
+
+    username = user_info[1]
+
+    info_dict = {
+        "messages sent": user_info[2]
+    }
+
+    return render_template("profile.html", username = username, user_info = info_dict)
+
 @sock.route("/ws")
 def websocket(ws):
     user_id = get_user_id()
@@ -218,6 +233,6 @@ def error(code: int = 400, text: str = "Something went wrong"):
 
 
 if __name__ == "__main__":
-    # app.run(debug = True)
+    app.run(debug = True)
     # app.run()
-    app.run(host = "0.0.0.0")
+    # app.run(host = "0.0.0.0")

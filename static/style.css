@@ -4,6 +4,23 @@ body {
     background-color: #ececec;
 }
 
+.logo {
+    font-family: "Share Tech", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+
+    font-size: 25px;
+}
+
+a, button, p, textarea, span {
+    font-family: "Raleway", sans-serif;
+    font-family: "Raleway", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+
+    font-weight: 500;
+}
+
 #chat-body {
     overflow: hidden;
 }
@@ -438,17 +455,17 @@ input:focus {
     justify-content: flex-start;
     align-items: center;
 
-    width: 80%;
+    width: 95%;
     height: 80%;
 
 
     border-radius: 20px;
-    background: linear-gradient(-45deg, #c1bfd3, #ccd9f0);
+    background: linear-gradient(-45deg, #dfdfdf, #f1f1f1);
 
     box-shadow: 5px 5px 15px #011d2b62;
 
     position: absolute;
-    
+
     margin: 20px;
     padding: 30px;
 
@@ -490,3 +507,82 @@ input:focus {
 
     border-color: #011d2b63;
 }
+
+
+
+h1 {
+    font-family: "Share Tech", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+
+    font-size: 25px;
+}
+
+.user-info-container {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: flex-start;
+
+    margin: 0px 20px;
+}
+
+
+.stat {
+    font-size: 25px;
+}
+
+#username-title-hyperlink {
+    text-decoration: none;
+    position: absolute;
+
+    top: 20px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    color: inherit;
+
+    transition: color 0.2s ease;
+}
+
+#username-title-hyperlink:hover {
+    color: #104f6e;
+}
+
+#go-back-link {
+    position: absolute;
+    bottom: 20px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    color: #111111;
+
+    text-decoration-color: transparent;
+    text-underline-offset: 2px;
+
+    text-decoration-thickness: 1px;
+
+    font-size: 20px;
+
+    transition:
+        color 0.2s ease,
+        text-decoration-color 0.2s ease;
+}
+
+#go-back-link:hover {
+    color: #104f6e;
+
+    text-decoration-color: #104f6eff;
+}
+

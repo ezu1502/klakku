@@ -5,6 +5,13 @@
         <title>{% block title %}{% endblock %} - Klakku Messenger</title>
 
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&family=Share+Tech&display=swap" rel="stylesheet">
+        <!--       -->
+
         <script src="{{url_for('static', filename='logic.js')}}"></script>
     </head>
 
@@ -15,7 +22,7 @@
 
             <div class="options">
                 {% if session.get("user_id") %}
-                    <a href="/">Account</a>
+                    <a href="/profile/{{ session.get('username') }}">Profile</a>
                     <a href="/logout">Log Out</a>
                 {% else %}
                     <a href="/login">Login</a>

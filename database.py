@@ -191,3 +191,15 @@ class Database:
                 self._read_command(Commands.ADD_MESSAGE),
                 (sender_id, conversation_id, content)
             )
+
+    def get_user_info(self, username: str) -> tuple | None:
+        with self.connection(commit = False) as con:
+            info = con.execute(
+                self._read_command(Commands.GET_USER_INFO),
+                (username,)
+            ).fetchone()
+
+            if not info:
+                return None
+
+            return info

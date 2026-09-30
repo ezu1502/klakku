@@ -8,6 +8,13 @@
 
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <script src="{{ url_for('static', filename='logic.js') }}"></script>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&family=Share+Tech&display=swap" rel="stylesheet">
+        <!--       -->
+
     </head>
 
     <body id="chat-body" data-recipient-id="{{ recipient.id }}">
@@ -29,8 +36,7 @@
                 </nav>
 
                 <nav class="recipient-nav">
-                    <a href="/" class="logo">{{ recipient.username }}</a>
-                    
+                    <a href="/profile/{{ recipient.username }}" class="logo">@{{ recipient.username }}</a>
                 </nav>
 
             </div>

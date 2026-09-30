@@ -13,6 +13,7 @@ class SQLCommands(Enum):
     CREATE_USER = auto()
     CHECK_USER = auto()
     GET_USER_BY_USERNAME = auto()
+    GET_USER_INFO = auto()
 
     GET_CONVERSATION = auto()
     GET_USER_CONVERSATIONS = auto()
