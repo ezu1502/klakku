@@ -8,6 +8,7 @@ function add_logic(){
     listen_to_send();
 
     socket = connect_websocket();
+    scroll_to_bottom();
 }
 
 
@@ -90,7 +91,9 @@ function send_message(){
 }
 
 function connect_websocket(){
-    const socket = new WebSocket(`ws://${window.location.host}/ws`);
+    let protocol = location.protocol === "https:" ? "wss:" : "ws:";
+
+    const socket = new WebSocket(`${protocol}//${window.location.host}/ws`);
 
     socket.addEventListener("open", function(){
         console.log("Websocket conectado!");
@@ -103,7 +106,27 @@ function connect_websocket(){
         add_message(message);
     });
 
+    socket.addEventListener("error", function(event){
+        console.error("Erro no socket! ", event)
+    });
+
+    socket.addEventListener("close", function(event){
+        console.error("Websocket fechado! ", event.code, event.reason)
+    });
+
     return socket;
+}
+
+function scroll_to_bottom(){
+    const messages = document.querySelector(".messages");
+
+    if (!messages){
+        return;
+    }
+
+    messages.scrollTop = messages.scrollHeight;
+
+
 }
 
 function add_message(message){
@@ -130,8 +153,21 @@ function add_message(message){
     message_content.textContent = message.content;
 
     const time_stamp = document.createElement("span");
-    // tenho que ver como faz isso kkkkkkkk
 
-    message_div.appendChild(message_content)
-    messages.appendChild(message_div)
+    console.log(message);
+    console.log(message.timestamp);
+    
+    const date = new Date(message.timestamp);
+
+    time_stamp.textContent = date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+
+    message_div.appendChild(message_content);
+    message_div.appendChild(time_stamp);
+
+    messages.appendChild(message_div);
+
+    scroll_to_bottom();
 }

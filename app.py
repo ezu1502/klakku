@@ -1,7 +1,8 @@
 import os
 from flask import Flask, render_template, request, redirect, session
 from flask_sock import Sock
-from datetime import datetime
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from database import Database
 from helpers import validate_register_input
 
@@ -140,7 +141,10 @@ def chat(recipient_username: str):
         {
             "sender_id": message[0],
             "content": message[1],
-            "sent_at": datetime.strptime(message[2], "%Y-%m-%d %H:%M:%S").strftime("%H:%M")
+            "sent_at": datetime.strptime(message[2], "%Y-%m-%d %H:%M:%S")
+            .replace(tzinfo = timezone.utc)
+            .astimezone(ZoneInfo("America/Sao_Paulo"))
+            .strftime("%H:%M")
         }
         for message in chat_messages
     ]
@@ -182,6 +186,10 @@ def websocket(ws):
             message_object = json.loads(message)
             message_object["user_id"] = user_id
 
+            message_object["timestamp"] = (
+                datetime.now(timezone.utc).isoformat()                          
+            )
+
             echo_message = json.dumps(message_object)
 
             recipient_id = int(message_object["recipient_id"])
@@ -201,7 +209,7 @@ def websocket(ws):
         if socket_connections.get(user_id) is ws:
             del socket_connections[user_id]
 
-            print(f"DISCONNECTED: user={user_id}, connections={list(socket_connections.keys())}")
+            # print(f"DISCONNECTED: user={user_id}, connections={list(socket_connections.keys())}")
 
 
 
@@ -211,4 +219,5 @@ def error(code: int = 400, text: str = "Something went wrong"):
 
 if __name__ == "__main__":
     # app.run(debug = True)
+    # app.run()
     app.run(host = "0.0.0.0")

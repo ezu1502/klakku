@@ -7,33 +7,35 @@
 {% endblock %}
 
 {% block main %}
-    
-    {% for conversation_id, username in conversations %}
-        <a href="/chat/{{ username }}">
-            {{ username }}
-        </a>
-    {% endfor %}
+    <div class="chats-page-container">
+        <div class="chats-list">
+            {% for conversation_id, username in conversations %}
+                <a href="/chat/{{ username }}" class="chat-item">
+                    @{{ username }}
+                </a>
+            {% endfor %}
+        </div>
 
-    <button class="k-button" id="open-dialog-button">
-        + Create Chat
-    </button>
+        <button class="k-button" id="open-dialog-button">
+            + Create Chat
+        </button>
 
-    <dialog id="create-chat-dialog">
-        <form method="post" action="/chats">
-            <h2>New Chat</h2>
+        <dialog id="create-chat-dialog">
+            <form method="post" action="/chats">
+                <h2>New Chat</h2>
 
-            <input
-                type="text"
-                id="username"
-                name="username"
-                placeholder="Username"
-                autofocus
-                autocomplete="off"
-            >
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Username"
+                    autofocus
+                    autocomplete="off"
+                >
 
-            <button type="submit" class="k-button">Create</button>
-            <button type="button" id="close-dialog-button" class="k-button">Cancel</button>
-        </form>
-    </dialog>
-
+                <button type="submit" class="k-button">Create</button>
+                <button type="button" id="close-dialog-button" class="k-button">Cancel</button>
+            </form>
+        </dialog>
+    </div>
 {% endblock %}
