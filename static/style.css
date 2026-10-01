@@ -697,3 +697,62 @@ footer p {
 
     color: #eeeeee;
 }
+
+.flash {
+    font-family: "Raleway", sans-serif;
+
+    padding: 20px 30px;
+
+    font-weight: 600;
+
+    color: #EEEEEE;
+
+    animation: flash-in 0.3s ease;
+}
+
+.flash.error {
+    background: linear-gradient(to right, #940000, #b40000);
+
+}
+
+.flash.warning {
+    background: linear-gradient(to right, #946000, #b46000);
+
+}
+
+.flash.success {
+    background: linear-gradient(to right, #005f2b, #1ead5e);
+}
+
+.flash.info {
+    background: linear-gradient(to right, #363636, #a5a5a5);
+}
+
+@keyframes flash-in {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.flash.hide {
+    animation: flash-hide 0.3s ease;
+}
+
+@keyframes flash-hide {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}

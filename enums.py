@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum, auto, StrEnum
 from pathlib import Path
 
 COMMAND_FOLDER = Path(__file__).parent / "sql_commands"
@@ -30,3 +30,10 @@ class SQLCommands(Enum):
     @property
     def path(self) -> Path:
         return COMMAND_FOLDER / self.value
+
+
+class FlashStatus(StrEnum):
+    SUCCESS = "success"
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"

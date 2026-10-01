@@ -1,10 +1,11 @@
 import os
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, flash
 from flask_sock import Sock
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 from database import Database
 from helpers import validate_register_input
+from enums import FlashStatus as FS
 
 import json
 
@@ -36,17 +37,20 @@ def register():
     confirm = request.form.get("confirm-password")
 
     if not validate_register_input(username, password, confirm):
+        flash("Invalid register input!", FS.WARNING)
         return redirect("/register")
 
     creation_success = database.create_user(username = username, password = password) # type: ignore
 
     if not creation_success:
+        flash(f"The username \"@{username}\" is already in use!", FS.ERROR)
         return redirect("/register")
 
 
     user = database.get_user_by_username(username) # type: ignore
 
     if user is None:
+        flash("Couldn't log in automatically!", FS.WARNING)
         return redirect("/")
 
     _, user_id = user
@@ -65,11 +69,13 @@ def login():
     password = request.form.get("password")
 
     if not username or not password:
+        flash("Invalid username or password input!", FS.ERROR)
         return redirect("/login")
 
     user_id = database.check_user(username, password)
 
     if user_id is None:
+        flash("User not found!", FS.ERROR)
         return redirect("/login")
 
     session["user_id"] = user_id
@@ -77,11 +83,13 @@ def login():
 
     database.add_login(user_id = user_id)
 
+    flash(f"Logged in as @{username}.", FS.SUCCESS)
     return redirect("/")
 
 @app.get("/logout")
 def logout():
     session.clear()
+    flash("Logged out successfully!", FS.SUCCESS)
     return redirect("/login")
 
 @app.route("/chats", methods = ["GET", "POST"])
@@ -90,8 +98,8 @@ def chats():
         user_id = get_user_id()
 
         if user_id is None:
-            print("user_id is none!")
-            return redirect("/")
+            flash("You need to be logged in in order to see your chats!", FS.WARNING)
+            return redirect("/login")
 
         user_conversations = database.get_user_conversations(user_id)
 
@@ -100,6 +108,7 @@ def chats():
     recipient = request.form.get("username")
 
     if recipient is None:
+        flash("Couldn't find recipient!", FS.ERROR)
         return redirect("/")
 
     return create_chat(recipient)
@@ -108,12 +117,13 @@ def create_chat(recipient_username: str):
     user_id = get_user_id()
 
     if user_id is None:
-        return error()
+        flash("You need to be logged in to create a chat!", FS.WARNING)
+        return redirect("/login")
 
     result = database.get_user_by_username(recipient_username)
 
     if result is None:
-        print("Recipient doesn't exist!")
+        flash("Recipient doesn't exist!", FS.ERROR)
         return redirect("/")
 
     recipient_id = result[0]
@@ -123,7 +133,7 @@ def create_chat(recipient_username: str):
     if chat_between_users is None:
         database.create_chat(user_id, recipient_id)
     else:
-        print("Chat already exists!")
+        flash("Chat already exists!", FS.INFO)
 
     return redirect(f"/chat/{recipient_username}")
 
@@ -133,19 +143,21 @@ def chat(recipient_username: str):
     user_id = get_user_id()
 
     if user_id is None:
-        return error()
+        flash("You need to be logged in to enter a chat!", FS.WARNING)
+        return redirect("/login")
 
     result = database.get_user_by_username(recipient_username)
 
     if result is None:
-        return error(code = 404, text = "Couldn't find recipient")
+        flash("Couldn't find user!", FS.ERROR)
+        return redirect("/chats")
 
     recipient_id = result[0]
 
     chat_messages = database.get_chat_messages(user_id, recipient_id)
 
     if chat_messages is None:
-        print("There isn't a chat between the given users!")
+        flash("There isn't a chat between the given users!", FS.WARNING)
         return redirect("/chats")
 
     chat_messages = [ # (sender_id, content, sent_at)
@@ -182,6 +194,7 @@ def profile(recipient_username: str):
     user_info = database.get_user_info(recipient_username)
 
     if user_info is None:
+        flash("Couldn't fetch user info!", FS.ERROR)
         return redirect("/")
 
     username = user_info[1]
@@ -244,6 +257,6 @@ def error(code: int = 400, text: str = "Something went wrong"):
 
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    # app.run(debug = True)
     # app.run()
-    # app.run(host = "0.0.0.0")
+    app.run(host = "0.0.0.0", port=5000)

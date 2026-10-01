@@ -16,7 +16,6 @@
     </head>
 
     <body>
-
         <nav class="klakku-nav">
             <a href="/" class="logo" id="main-logo">Klakku</a>
 
@@ -34,6 +33,18 @@
             </div>
             
         </nav>
+
+        {% with messages = get_flashed_messages(with_categories = true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
 
         <main class="{% block main_class %}{% endblock %}">
             {% block main %}{% endblock %}

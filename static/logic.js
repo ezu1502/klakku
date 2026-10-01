@@ -9,6 +9,8 @@ function add_logic(){
 
     socket = connect_websocket();
     scroll_to_bottom();
+
+    set_flash_timeout();
 }
 
 
@@ -170,4 +172,26 @@ function add_message(message){
     messages.appendChild(message_div);
 
     scroll_to_bottom();
+}
+
+
+function set_flash_timeout(){
+    const flashes = document.querySelectorAll(".flash");
+
+    flashes.forEach(function(flash){
+        setTimeout(
+            function(){
+                flash.classList.add("hide");
+
+                flash.addEventListener("animationend", function(){
+                    flash.remove();
+                });
+        
+            },
+            
+            4000
+        );
+
+        
+    });
 }
