@@ -8,6 +8,10 @@ Register, search for a username, and chat.
 
 Developed as my final project for CS50x.
 
+**[Live Demo](https://klakku.onrender.com/)**
+
+_**Demo note:** This deployment uses SQLite on Render's ephemeral filesystem, so database contents may be reset after a redeploy._
+
 ## v0.1.0 Features
 
 * Session authentication
