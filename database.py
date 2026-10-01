@@ -152,6 +152,20 @@ class Database:
 
             new_chat_id = result[0]
 
+            print("user_1:", user_1)
+            print("user_2:", user_2)
+            print("new_chat_id:", new_chat_id)
+
+            print(
+                "users:",
+                con.execute("SELECT id, username FROM users").fetchall()
+            )
+
+            print(
+                "conversations:",
+                con.execute("SELECT id FROM conversations").fetchall()
+            )
+
             con.execute(
                 self._read_command(Commands.INSERT_CHAT_MEMBER),
                 (new_chat_id, user_1)

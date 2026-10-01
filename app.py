@@ -53,7 +53,7 @@ def register():
         flash("Couldn't log in automatically!", FS.WARNING)
         return redirect("/")
 
-    _, user_id = user
+    user_id, _ = user
     
     session["user_id"] = user_id
     session["username"] = username
@@ -257,6 +257,6 @@ def error(code: int = 400, text: str = "Something went wrong"):
 
 
 if __name__ == "__main__":
-    # app.run(debug = True)
+    app.run(debug = True)
     # app.run()
-    app.run(host = "0.0.0.0", port=5000)
+    # app.run(host = "0.0.0.0", port=5000)
